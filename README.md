@@ -1,7 +1,7 @@
 # Virtual Joystick for Stride
 
 <p align="center">
-  <img width="958" height="540" alt="VirtualJoystick" src="https://github.com/user-attachments/assets/80a4dda0-a54f-4703-92fe-42e3dbc382cf" />
+  <img width="958" height="540" alt="VirtualJoystick" src="https://github.com/user-attachments/assets/1b9fc65c-c935-4dc6-afec-7000c1176d76" />
 </p>
 
 A responsive, event-driven virtual joystick component for the 'Stride Game Engine', designed for mobile projects that require smooth, intuitive directional input.
@@ -170,12 +170,13 @@ UI Entity
 Remember to enter correct page design resolution in VirtualJoystick parameters to keep correct scaling.
 
 <p align="center">
-  <img width="578" height="524" alt="Desing_resolution_virtual_joystick" src="https://github.com/user-attachments/assets/0ab143af-ff46-4e39-b270-a634a2ce6b32">
-  <img width="581" height="313" alt="Design_resolution" src="https://github.com/user-attachments/assets/f087bdc7-bf21-4e3b-93fb-a209bcfe6eaa" />
+  <img width="578" height="524" alt="Desing_resolution_virtual_joystick" src="https://github.com/user-attachments/assets/7b704411-3f69-4e46-b659-f279e9e6a446" />
+  <img width="581" height="313" alt="Design_resolution" src="https://github.com/user-attachments/assets/307533f4-3fc9-4e0f-a314-9529a33ce97b" />
 </p>
+
 
 The VirtualJoystick provides a direction based on the orientation of your chosen relative object, allowing your e.g. character to move exactly where the VirtualJoystick points to within that object’s local space.
 
 <p align="center">
-  <img width="967" height="524" alt="Relative_object" src="https://github.com/user-attachments/assets/eb0ce87f-71c8-4aea-8c8e-fee1a9602b13" />
+  <img width="967" height="524" alt="Relative_object" src="https://github.com/user-attachments/assets/d1404a3b-c33b-4ba8-83db-07d918cb529c" />
 </p>
