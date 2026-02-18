@@ -1,0 +1,131 @@
+!SceneAsset
+Id: 7d6c0c42-fe4e-4489-a303-60be724e6db7
+SerializedVersion: {Stride: 3.1.0.1}
+Tags: []
+ChildrenIds: []
+Offset: {X: 0.0, Y: 0.0, Z: 0.0}
+Hierarchy:
+    RootParts:
+        - ref!! cb745aba-e8cd-4e4f-a9ae-3b5046f031c8
+        - ref!! a290ce77-92dd-42c7-b1ae-b0b6f52c7bdc
+        - ref!! 5b6e75aa-c3bf-43f7-8e4a-701c7679a218
+        - ref!! 652d6c92-c8b1-475f-b940-46665d3847e8
+        - ref!! 593b37a4-b572-4e34-975e-7bccc86898f4
+        - ref!! 8ae0a0ca-689f-4bcf-9827-0d5ab8e4a65d
+    Parts:
+        -   Entity:
+                Id: 593b37a4-b572-4e34-975e-7bccc86898f4
+                Name: Sphere
+                Components:
+                    ef30148d5e64c3eb33b5bdcef1782d52: !TransformComponent
+                        Id: 208e4d13-8ee5-4009-ae7d-c733a3db51c9
+                        Position: {X: 0.0, Y: 0.5, Z: 0.0}
+                        Rotation: {X: 0.0, Y: 0.0, Z: 0.0, W: 1.0}
+                        Scale: {X: 1.0, Y: 1.0, Z: 1.0}
+                        Children: {}
+                    9d40820ff95c52eff6e9af2b959a8f95: !ModelComponent
+                        Id: 79c5d9ea-ad2f-478f-8b1f-a8546760fe6f
+                        Model: 206fcc31-3829-4ad4-b926-1ffd788b90fc:Sphere
+                        Materials: {}
+        -   Entity:
+                Id: 5b6e75aa-c3bf-43f7-8e4a-701c7679a218
+                Name: Skybox
+                Components:
+                    c59bcccf4dfd3286ba5357038115aa10: !TransformComponent
+                        Id: 0567b5fb-d39e-41d2-8a40-ba7299808df0
+                        Position: {X: 0.0, Y: 2.0, Z: -2.0}
+                        Rotation: {X: 0.0, Y: 0.0, Z: 0.0, W: 1.0}
+                        Scale: {X: 1.0, Y: 1.0, Z: 1.0}
+                        Children: {}
+                    904ac01b8f1f04c5a9e5fd53bf80aea7: !BackgroundComponent
+                        Id: 966a70cc-16f3-4f50-bafd-2848fa83d61e
+                        Texture: 5401282b-dd5d-4783-aa63-9f7064c0a6ea:Skybox texture
+                    f8a24ab3b7690c67a0c5bb7553647493: !LightComponent
+                        Id: 61a72819-8fe5-45ea-843f-73ef5c3d0e7a
+                        Type: !LightSkybox
+                            Skybox: 2333151e-8e81-4058-a29d-360eadaf573a:Skybox
+        -   Entity:
+                Id: 652d6c92-c8b1-475f-b940-46665d3847e8
+                Name: Ground
+                Components:
+                    169fd4a79517742b7dc2efee1348bc1c: !TransformComponent
+                        Id: 57605a1b-ea4a-490a-8b37-1521bbb60196
+                        Position: {X: 0.0, Y: 0.0, Z: 0.0}
+                        Rotation: {X: 0.0, Y: 0.0, Z: 0.0, W: 1.0}
+                        Scale: {X: 1.0, Y: 1.0, Z: 1.0}
+                        Children: {}
+                    914d736645276a38feb8322338b94d4a: !ModelComponent
+                        Id: 951a4793-07cb-4ab2-8ebd-e75fd530bbf5
+                        Model: 87274f4e-a237-4680-8086-5fe41b11ef10:Ground
+                        Materials: {}
+        -   Entity:
+                Id: 8ae0a0ca-689f-4bcf-9827-0d5ab8e4a65d
+                Name: VirtualJoystick
+                Components:
+                    8858572dc7696b038258c0291f007441: !TransformComponent
+                        Id: a5d6b243-bc35-49e5-9073-101693dd3456
+                        Position: {X: 0.0, Y: 0.0, Z: 0.0}
+                        Rotation: {X: 0.0, Y: 0.0, Z: 0.0, W: 1.0}
+                        Scale: {X: 1.0, Y: 1.0, Z: 1.0}
+                        Children: {}
+                    5b2232303636a2412d87b1b1d240b74c: !UIComponent
+                        Id: d07182e3-f248-4f93-8f0a-e9f3ae640a26
+                        Page: 014c9a89-07ae-4d1b-975a-95feb65ff4df:VirtualJoystick
+                        Resolution: {X: 1920.0, Y: 1080.0, Z: 1000.0}
+                        Size: {X: 1.28, Y: 0.72, Z: 1.0}
+                    3ccf9757c5ef517777acb09a2fd65ddf: !Sharp.Stride.VirtualJoystick.Scripts.VirtualJoystick,Sharp.Stride.VirtualJoystick
+                        Id: dafee688-f302-48b7-bf4d-78fd68e9080c
+                        DesignResolution: {Width: 1280, Height: 720}
+                        RelativeObject: ref!! 593b37a4-b572-4e34-975e-7bccc86898f4
+                        InactiveOpacity: 0.5
+                        ActiveOpacity: 1.0
+        -   Entity:
+                Id: a290ce77-92dd-42c7-b1ae-b0b6f52c7bdc
+                Name: Directional light
+                Components:
+                    de5dc9c443bdad60da4e6e1f3befdded: !TransformComponent
+                        Id: b2b526cf-d333-4142-9039-d43b9ad79e45
+                        Position: {X: 0.0, Y: 2.0, Z: 0.0}
+                        Rotation: {X: 1.131334E-08, Y: -0.9659258, Z: -0.25881904, W: -4.222196E-08}
+                        Scale: {X: 1.0, Y: 1.0, Z: 1.0}
+                        Children: {}
+                    17bd66ac1a87ae7c5a5e14e70df149b9: !LightComponent
+                        Id: 42a68d92-60ef-4365-bc75-1c486f57bf13
+                        Type: !LightDirectional
+                            Color: !ColorRgbProvider
+                                Value: {R: 1.0, G: 1.0, B: 1.0}
+                            Shadow:
+                                Enabled: true
+                                Filter: !LightShadowMapFilterTypePcf
+                                    FilterSize: Filter5x5
+                                Size: Large
+                                DepthRange: {}
+                                PartitionMode: !LightDirectionalShadowMap.PartitionLogarithmic {}
+                                ComputeTransmittance: false
+                                BiasParameters: {}
+                        Intensity: 20.0
+        -   Entity:
+                Id: cb745aba-e8cd-4e4f-a9ae-3b5046f031c8
+                Name: Camera
+                Components:
+                    0141f15a03e6caddd187420391233cf7: !TransformComponent
+                        Id: 07c2d5d8-be44-485b-ae65-ee62a748277b
+                        Position: {X: 2.6, Y: 0.6, Z: -1.0}
+                        Rotation: {X: 0.0, Y: 0.82903755, Z: 0.0, W: 0.5591929}
+                        Scale: {X: 1.0, Y: 1.0, Z: 1.0}
+                        Children: {}
+                    85f0f21ff0cd5e3343c67a9f2eed3bd2: !CameraComponent
+                        Id: 4c5679bb-f9ac-4d4b-ab82-1ccf71167c2f
+                        Name: null
+                        Projection: Perspective
+                        Slot: e59316af-f07c-42cd-8feb-5b28f046cc3a
+                    095f6709fe5c1e169a75ceeb10fc8c43: !Sharp.Stride.VirtualJoystick.BasicCameraController,Sharp.Stride.VirtualJoystick
+                        Id: 38118acc-b727-46a1-8b29-69daf62896f8
+                        Gamepad: false
+                        KeyboardMovementSpeed: {X: 5.0, Y: 5.0, Z: 5.0}
+                        TouchMovementSpeed: {X: 0.7, Y: 0.7, Z: 0.3}
+                        SpeedFactor: 5.0
+                        KeyboardRotationSpeed: {X: 3.0, Y: 3.0}
+                        MouseRotationSpeed: {X: 1.0, Y: 1.0}
+                        TouchRotationSpeed: {X: 1.0, Y: 0.7}
+                        VirtualJoystick: !Sharp.Stride.VirtualJoystick.Scripts.VirtualJoystick,Sharp.Stride.VirtualJoystick ref!! dafee688-f302-48b7-bf4d-78fd68e9080c

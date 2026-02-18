@@ -1,0 +1,16 @@
+!SpriteSheet
+Id: bc6ca5cd-e3d2-48e7-be45-7c9a5c917278
+SerializedVersion: {Stride: 2.0.0.0}
+Tags: []
+Type: UI
+ColorKeyColor: {R: 255, G: 0, B: 255, A: 255}
+IsCompressed: false
+Packing: {}
+Sprites:
+    6a2cdc70ce52cfe9a27f96b71f908a14:
+        Source: !file ../Resources/Threshold.png
+        Name: Threshold
+        TextureRegion: {X: 0, Y: 0, Width: 1600, Height: 1600}
+        Center: {X: 0.0, Y: 0.0}
+        Borders: {X: 0.0, Y: 0.0, Z: 0.0, W: 0.0}
+        BorderColor: {R: 0, G: 0, B: 0, A: 0}

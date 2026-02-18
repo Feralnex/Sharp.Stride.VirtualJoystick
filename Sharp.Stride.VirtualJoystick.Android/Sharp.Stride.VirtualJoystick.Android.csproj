@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0-android</TargetFramework>
+    <SupportedOSPlatformVersion>21</SupportedOSPlatformVersion>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Sharp.Stride.VirtualJoystick</RootNamespace>
+    <StrideGraphicsApi>Vulkan</StrideGraphicsApi>
+    <OutputPath>..\Bin\Android\$(Configuration)\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+
+    <ApplicationId>Sharp.Stride.VirtualJoystick</ApplicationId>
+    <ApplicationVersion>1</ApplicationVersion>
+    <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+
+    <!-- Force msbuild to check to rebuild this assembly instead of letting VS IDE guess -->
+    <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
+
+    <!-- Use AssemblyName rather than RootNamespace for Resource class otherwise it might clash between some assemblies (i.e. MyGame and MyGame.Android) -->
+    <AndroidResgenNamespace>$(AssemblyName)</AndroidResgenNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Sharp.Stride.VirtualJoystick\Sharp.Stride.VirtualJoystick.csproj" />
+  </ItemGroup>
+
+</Project>

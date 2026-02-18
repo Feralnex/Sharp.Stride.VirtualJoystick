@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 18
+VisualStudioVersion = 18.3.11512.155 d18.3
+MinimumVisualStudioVersion = 16.0.0.0
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sharp.Stride.VirtualJoystick.Windows", "Sharp.Stride.VirtualJoystick.Windows\Sharp.Stride.VirtualJoystick.Windows.csproj", "{C8062BA4-982D-4F27-A0F2-DAB3E142E2F4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sharp.Stride.VirtualJoystick", "Sharp.Stride.VirtualJoystick\Sharp.Stride.VirtualJoystick.csproj", "{BE393634-1EBB-4901-8E13-3B3F2FAD3492}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sharp.Stride.VirtualJoystick.Android", "Sharp.Stride.VirtualJoystick.Android\Sharp.Stride.VirtualJoystick.Android.csproj", "{C2EAC152-708E-4728-AFC3-0858607B0D1D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C8062BA4-982D-4F27-A0F2-DAB3E142E2F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8062BA4-982D-4F27-A0F2-DAB3E142E2F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8062BA4-982D-4F27-A0F2-DAB3E142E2F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8062BA4-982D-4F27-A0F2-DAB3E142E2F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE393634-1EBB-4901-8E13-3B3F2FAD3492}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE393634-1EBB-4901-8E13-3B3F2FAD3492}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE393634-1EBB-4901-8E13-3B3F2FAD3492}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE393634-1EBB-4901-8E13-3B3F2FAD3492}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2EAC152-708E-4728-AFC3-0858607B0D1D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2EAC152-708E-4728-AFC3-0858607B0D1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2EAC152-708E-4728-AFC3-0858607B0D1D}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{C2EAC152-708E-4728-AFC3-0858607B0D1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2EAC152-708E-4728-AFC3-0858607B0D1D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2EAC152-708E-4728-AFC3-0858607B0D1D}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
