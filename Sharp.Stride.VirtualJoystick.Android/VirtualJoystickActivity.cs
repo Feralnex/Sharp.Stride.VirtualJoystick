@@ -1,6 +1,6 @@
 using Android.App;
 using Android.Content.PM;
-
+using Sharp.Stride.VirtualJoystick.Scripts;
 using Stride.Engine;
 using Stride.Starter;
 
@@ -20,7 +20,7 @@ public class VirtualJoystickActivity : StrideActivity
     {
         base.OnRun();
 
-        Game = new Game();
+        Game = new CustomGame();
         Game.Run(GameContext);
     }
 

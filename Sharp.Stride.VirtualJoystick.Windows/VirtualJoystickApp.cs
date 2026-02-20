@@ -1,5 +1,5 @@
-using Stride.Engine;
+using Sharp.Stride.VirtualJoystick.Scripts;
 
-using var game = new Game();
+using var game = new CustomGame();
 game.Run();
 

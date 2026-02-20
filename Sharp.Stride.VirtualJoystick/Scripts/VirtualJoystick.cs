@@ -1,9 +1,13 @@
 ﻿using CommunityToolkit.HighPerformance;
 using Sharp.Collections;
 using Sharp.Collections.Extensions;
+using Sharp.Stride.VirtualJoystick.Scripts.Structures;
+using Stride.Core;
 using Stride.Core.Annotations;
 using Stride.Core.Mathematics;
 using Stride.Engine;
+using Stride.Games;
+using Stride.Graphics;
 using Stride.Input;
 using Stride.UI;
 using Stride.UI.Controls;
@@ -11,8 +15,6 @@ using Stride.UI.Panels;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using Sharp.Stride.VirtualJoystick.Scripts.Extensions;
-using Sharp.Stride.VirtualJoystick.Scripts.Structures;
 
 namespace Sharp.Stride.VirtualJoystick.Scripts
 {
@@ -139,20 +141,15 @@ namespace Sharp.Stride.VirtualJoystick.Scripts
 
         #region UI
 
-        private Vector3 _surfacePosition;
-        private Vector3 _zonePosition;
-        private Vector3 _initialThresholdPosition;
-        private Vector3 _initialThumbstickPosition;
+        private IAutoUIScaling AutoScaling { get; set; }
+        private Vector3 ZonePosition => AutoScaling.GetPosition(Zone);
+        private Vector3 InitialThresholdPosition => AutoScaling.GetPosition(Threshold);
+        private Vector3 InitialThumbstickPosition => AutoScaling.GetPosition(Thumbstick);
+
         private Vector3 _currentThresholdPosition;
         private Vector3 _currentThumbstickPosition;
 
-        private Size2 _previousResolution;
-        private Size2 _currentResolution;
-        private float _widthScale;
-        private float _heightScale;
-
         private UIComponent UI { get; set; }
-        private Canvas Surface { get; set; }
         private Canvas Zone { get; set; }
         private ImageElement Threshold { get; set; }
         private ImageElement Thumbstick { get; set; }
@@ -191,18 +188,11 @@ namespace Sharp.Stride.VirtualJoystick.Scripts
         {
             GetReferences();
             InitializeData();
-            SetScale(_currentResolution, _designResolution);
-            EnsureProperSurfaceSize();
-            ScaleSize(Zone, false, 2);
-            ScaleSize(Threshold, true, 4);
-            ScaleSize(Thumbstick, true, 2);
-            ScaleMargins();
-            InitializePositions();
-            ResetMargins();
-            OverrideAbsolutePositions();
             Deactivate();
 
-            Game.Window.ClientSizeChanged += OnClientSizeChanged;
+            AutoScaling = Services.GetService<IAutoUIScaling>();
+            AutoScaling.Add(UI, _designResolution);
+            AutoScaling.SetCustomScaling(Thumbstick, OnScaleThumbstickPosition);
         }
 
         public override void Update()
@@ -218,17 +208,17 @@ namespace Sharp.Stride.VirtualJoystick.Scripts
             _absoluteAngleChangedListeners.Clear();
             _relativeAngleChangedListeners.Clear();
             _dragging.Clear();
-
-            Game.Window.ClientSizeChanged -= OnClientSizeChanged;
         }
 
         private void GetReferences()
         {
-            UI = Entity.Get<UIComponent>();
-            Surface = UI.Page.RootElement as Canvas;
-            Zone = Surface.FindVisualChildOfType<Canvas>(nameof(Zone));
-            Threshold = Surface.FindVisualChildOfType<ImageElement>(nameof(Threshold));
-            Thumbstick = Surface.FindVisualChildOfType<ImageElement>(nameof(Thumbstick));
+            UIComponent ui = Entity.Get<UIComponent>();
+            UIElement root = ui.Page.RootElement;
+
+            UI = ui;
+            Zone = root.FindVisualChildOfType<Canvas>(nameof(Zone));
+            Threshold = root.FindVisualChildOfType<ImageElement>(nameof(Threshold));
+            Thumbstick = root.FindVisualChildOfType<ImageElement>(nameof(Thumbstick));
         }
 
         private void InitializeData()
@@ -242,147 +232,19 @@ namespace Sharp.Stride.VirtualJoystick.Scripts
             _absoluteAngleInDegrees = 0f;
             _relativeAngleInRadians = 0f;
             _relativeAngleInDegrees = 0f;
-            _previousResolution = _designResolution;
-            _currentResolution = Game.Window.ClientBounds.Size;
         }
 
-        private void SetScale(Size2 currentResolution, Size2 previousResolution)
+        private Vector3 OnScaleThumbstickPosition(UIElement element)
         {
-            _widthScale = (float)currentResolution.Width / previousResolution.Width;
-            _heightScale = (float)currentResolution.Height / previousResolution.Height;
-        }
-
-        private void EnsureProperSurfaceSize()
-        {
-            if (float.IsNaN(Surface.Width))
-                Surface.Width = Surface.Parent.GetWidth(Game.Window);
-            if (float.IsNaN(Surface.Height))
-                Surface.Height = Surface.Parent.GetHeight(Game.Window);
-        }
-
-        private void ScaleSize(UIElement element, bool isSquare, float denominator)
-        {
-            if (isSquare)
+            var thresholdPosition = AutoScaling.GetPosition(Threshold);
+            var thumbstickPosition = new Vector3()
             {
-                if (float.IsNaN(element.Width))
-                    element.Width = element.Parent.Width / denominator;
-                if (float.IsNaN(element.Height))
-                    element.Height = element.Width;
+                X = thresholdPosition.X + Threshold.Width / 2 - Thumbstick.Width / 2,
+                Y = thresholdPosition.Y + Threshold.Height / 2 - Thumbstick.Height / 2,
+                Z = thresholdPosition.Z
+            };
 
-                float scale = Math.Min(_widthScale, _heightScale);
-
-                element.Width *= scale;
-                element.Height *= scale;
-            }
-            else
-            {
-                if (float.IsNaN(element.Width))
-                    element.Width = element.Parent.Width / denominator * _widthScale;
-                else
-                    element.Width *= _widthScale;
-                if (float.IsNaN(element.Height))
-                    element.Height = element.Parent.Height / denominator * _heightScale;
-                else
-                    element.Height *= _heightScale;
-            }
-        }
-
-        private void ScaleMargins()
-        {
-            Surface.Margin = new Thickness(
-                Surface.Margin.Left * _widthScale,
-                Surface.Margin.Top * _heightScale,
-                Surface.Margin.Right * _widthScale,
-                Surface.Margin.Bottom * _heightScale);
-
-            Zone.Margin = new Thickness(
-                Zone.Margin.Left * _widthScale,
-                Zone.Margin.Top * _heightScale,
-                Zone.Margin.Right * _widthScale,
-                Zone.Margin.Bottom * _heightScale);
-
-            Threshold.Margin = new Thickness(
-                Threshold.Margin.Left * _widthScale,
-                Threshold.Margin.Top * _heightScale,
-                Threshold.Margin.Right * _widthScale,
-                Threshold.Margin.Bottom * _heightScale);
-
-            Thumbstick.Margin = new Thickness(
-                Thumbstick.Margin.Left * _widthScale,
-                Thumbstick.Margin.Top * _heightScale,
-                Thumbstick.Margin.Right * _widthScale,
-                Thumbstick.Margin.Bottom * _heightScale);
-        }
-
-        private Vector3 ScalePosition(Vector3 position)
-        {
-            var oldCenter = new Vector2(_previousResolution.Width / 2f, _previousResolution.Height / 2f);
-            var newCenter = new Vector2(_currentResolution.Width / 2f, _currentResolution.Height / 2f);
-            var oldPosition = new Vector2(position.X, position.Y);
-            var relativePosition = oldPosition - oldCenter;
-            var scaled = new Vector2(
-                relativePosition.X * _widthScale,
-                relativePosition.Y * _heightScale
-            );
-            var newPosition = newCenter + scaled;
-
-            position.X = newPosition.X;
-            position.Y = newPosition.Y;
-
-            return position;
-        }
-
-        private void InitializePositions()
-        {
-            _surfacePosition = Surface.GetLocalPosition(Game.Window);
-            _zonePosition = Zone.GetLocalPosition(Game.Window);
-            _initialThresholdPosition = Threshold.GetLocalPosition(Game.Window);
-            _initialThumbstickPosition = new Vector3(_initialThresholdPosition.X + Threshold.Width / 2 - Thumbstick.Width / 2, _initialThresholdPosition.Y + Threshold.Height / 2 - Thumbstick.Height / 2, _initialThresholdPosition.Z);
-            _currentThresholdPosition = _initialThresholdPosition;
-            _currentThumbstickPosition = _initialThumbstickPosition;
-        }
-
-        private void ResetMargins()
-        {
-            Surface.Margin = new Thickness(0, 0, 0, 0);
-            Zone.Margin = new Thickness(0, 0, 0, 0);
-            Threshold.Margin = new Thickness(0, 0, 0, 0);
-            Thumbstick.Margin = new Thickness(0, 0, 0, 0);
-        }
-
-        private void OverrideAbsolutePositions()
-        {
-            Surface.SetCanvasAbsolutePosition(_surfacePosition);
-            Zone.SetCanvasAbsolutePosition(_zonePosition);
-            Threshold.SetCanvasAbsolutePosition(_initialThresholdPosition);
-            Thumbstick.SetCanvasAbsolutePosition(_initialThumbstickPosition);
-        }
-
-        private void OnClientSizeChanged(object sender, EventArgs eventArgs)
-        {
-            var resolution = Game.Window.ClientBounds.Size;
-
-            SetNewResolution(resolution);
-            SetScale(_currentResolution, _previousResolution);
-            ScaleSize(Surface, false, 1);
-            ScaleSize(Zone, false, 2);
-            ScaleSize(Threshold, true, 4);
-            ScaleSize(Thumbstick, true, 2);
-            _surfacePosition = ScalePosition(_surfacePosition);
-            _zonePosition = ScalePosition(_zonePosition);
-            _initialThresholdPosition = ScalePosition(_initialThresholdPosition);
-            _initialThumbstickPosition = ScalePosition(_initialThumbstickPosition);
-            _currentThresholdPosition = ScalePosition(_currentThresholdPosition);
-            _currentThumbstickPosition = ScalePosition(_currentThumbstickPosition);
-            OverrideAbsolutePositions();
-        }
-
-        private void SetNewResolution(Size2 resolution)
-        {
-            UI.Resolution = new Vector3(resolution.Width, resolution.Height, UI.Resolution.Z);
-
-            _previousResolution = _currentResolution;
-            _currentResolution = resolution;
+            return thumbstickPosition;
         }
 
         private void OnSomePointingInsideZone(int pointerId)
@@ -413,8 +275,8 @@ namespace Sharp.Stride.VirtualJoystick.Scripts
 
         private bool IsPointingInsideZone(Vector2 pointerPosition)
         {
-            Vector2 zonePosition = new Vector2(_zonePosition.X, _zonePosition.Y);
-            Size2 zoneSize = new Size2((int)Zone.Size.X, (int)Zone.Size.Y);
+            Vector2 zonePosition = new Vector2(ZonePosition.X, ZonePosition.Y);
+            Size2 zoneSize = new Size2((int)Zone.Width, (int)Zone.Height);
 
             return pointerPosition.X >= zonePosition.X &&
                 pointerPosition.X <= zonePosition.X + zoneSize.Width &&
@@ -453,8 +315,8 @@ namespace Sharp.Stride.VirtualJoystick.Scripts
 
         private void OnPointerDown(Vector2 position)
         {
-            _currentThresholdPosition.X = position.X - _zonePosition.X - Threshold.Width / 2;
-            _currentThresholdPosition.Y = position.Y - _zonePosition.Y - Threshold.Height / 2;
+            _currentThresholdPosition.X = position.X - ZonePosition.X - Threshold.Width / 2;
+            _currentThresholdPosition.Y = position.Y - ZonePosition.Y - Threshold.Height / 2;
             _currentThumbstickPosition.X = _currentThresholdPosition.X + Threshold.Width / 2 - Thumbstick.Width / 2;
             _currentThumbstickPosition.Y = _currentThresholdPosition.Y + Threshold.Height / 2 - Thumbstick.Height / 2;
 
@@ -483,8 +345,8 @@ namespace Sharp.Stride.VirtualJoystick.Scripts
             _relativeInput = Vector2.Zero;
             _radius = 0f;
 
-            Threshold.SetCanvasAbsolutePosition(_initialThresholdPosition);
-            Thumbstick.SetCanvasAbsolutePosition(_initialThumbstickPosition);
+            Threshold.SetCanvasAbsolutePosition(InitialThresholdPosition);
+            Thumbstick.SetCanvasAbsolutePosition(InitialThumbstickPosition);
 
             _absoluteInputChangedListeners?.IfSome(OnSomeInputChanged, _absoluteInput);
             _relativeInputChangedListeners?.IfSome(OnSomeRelativeInputChanged, _relativeInput);
@@ -495,8 +357,8 @@ namespace Sharp.Stride.VirtualJoystick.Scripts
         private void OnDragging(Vector2 position)
         {
             Vector2 localPoint = new Vector2(
-                x: position.X - _zonePosition.X - _currentThresholdPosition.X - Threshold.Width / 2,
-                y: position.Y - _zonePosition.Y - _currentThresholdPosition.Y - Threshold.Height / 2);
+                x: position.X - ZonePosition.X - _currentThresholdPosition.X - Threshold.Width / 2,
+                y: position.Y - ZonePosition.Y - _currentThresholdPosition.Y - Threshold.Height / 2);
             Vector2 clampedLocalPoint = ClampLocalPoint(localPoint, Threshold.Size);
             Vector2 input = CalculateInput(clampedLocalPoint);
             Vector2 thumbstickPosition = CalculateThumbstickPosition(input, Threshold.Size);

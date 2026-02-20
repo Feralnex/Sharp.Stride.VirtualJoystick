@@ -3,9 +3,8 @@ using Stride.Core;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Input;
-using Sharp.Stride.VirtualJoystick.Scripts;
 
-namespace Sharp.Stride.VirtualJoystick
+namespace Sharp.Stride.VirtualJoystick.Scripts
 {
     /// <summary>
     /// A script that allows to move and rotate an entity through keyboard, mouse and touch input to provide basic camera navigation.
