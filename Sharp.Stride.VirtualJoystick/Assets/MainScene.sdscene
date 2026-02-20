@@ -119,8 +119,8 @@ Hierarchy:
                         Name: null
                         Projection: Perspective
                         Slot: e59316af-f07c-42cd-8feb-5b28f046cc3a
-                    095f6709fe5c1e169a75ceeb10fc8c43: !Sharp.Stride.VirtualJoystick.BasicCameraController,Sharp.Stride.VirtualJoystick
-                        Id: 38118acc-b727-46a1-8b29-69daf62896f8
+                    72806628db22049e100d94154ecaaa66: !Sharp.Stride.VirtualJoystick.Scripts.BasicCameraController,Sharp.Stride.VirtualJoystick
+                        Id: c29e18d6-7d85-48f7-b46d-ead161d1e904
                         Gamepad: false
                         KeyboardMovementSpeed: {X: 5.0, Y: 5.0, Z: 5.0}
                         TouchMovementSpeed: {X: 0.7, Y: 0.7, Z: 0.3}

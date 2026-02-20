@@ -70,8 +70,7 @@ Your UI layout must contain the following elements:
 
 These elements must be named exactly:
 
-```  
-Surface
+```
 Zone
 Threshold
 Thumbstick

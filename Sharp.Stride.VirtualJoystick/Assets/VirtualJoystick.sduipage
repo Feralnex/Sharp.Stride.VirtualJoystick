@@ -13,6 +13,9 @@ Hierarchy:
                 DependencyProperties: {}
                 BackgroundColor: {R: 0, G: 0, B: 0, A: 0}
                 Margin: {}
+                MaximumWidth: 3.4028235E+38
+                MaximumHeight: 3.4028235E+38
+                MaximumDepth: 3.4028235E+38
                 Name: Surface
                 Children:
                     45048d70d9a5ad0706ba9ee7b4ddf2a7: !Canvas ref!! e6593e1c-28ef-4dd3-a23c-e21d3d45f56d
@@ -35,7 +38,7 @@ Hierarchy:
         -   UIElement: !Canvas
                 Id: e6593e1c-28ef-4dd3-a23c-e21d3d45f56d
                 DependencyProperties: {}
-                BackgroundColor: {R: 0, G: 0, B: 0, A: 0}
+                BackgroundColor: {R: 243, G: 0, B: 0, A: 0}
                 Width: 640.0
                 Height: 360.0
                 HorizontalAlignment: Left
