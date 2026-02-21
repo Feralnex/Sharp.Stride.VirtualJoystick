@@ -10,7 +10,7 @@ namespace Sharp.Stride.VirtualJoystick.Scripts.UI.Scaling
     public partial class AutoUIScaling : IAutoUIScaling
     {
         private readonly Game _game;
-        private readonly Dictionary<UIComponent, Data> _uiData = new();
+        private readonly Dictionary<UIComponent, Data> _uiData;
         private Size2 _currentResolution;
 
         public AutoUIScaling(Game game)

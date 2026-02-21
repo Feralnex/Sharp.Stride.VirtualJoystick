@@ -63,10 +63,12 @@ Place the following files anywhere inside your Stride game project:
 ## UI Setup in Stride
 Your UI layout must contain the following elements:
 
-- 'Surface' — root canvas
-- 'Zone' — the interactive area (canvas)
-- 'Threshold' — outer ring image
-- 'Thumbstick' — inner stick image
+```
+'Surface' — root Canvas
+ ├── 'Zone' — the interactive area (Canvas)
+ ├──── 'Threshold' — outer ring image (ContentDecorator)
+ └────── 'Thumbstick' — inner stick image
+```
 
 These elements must be named exactly:
 
