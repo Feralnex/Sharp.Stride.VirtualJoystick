@@ -8,6 +8,24 @@ Hierarchy:
     RootParts:
         - !Canvas ref!! 4635e96d-81c4-4e1f-8954-ea20140446bd
     Parts:
+        -   UIElement: !ContentDecorator
+                Id: 3276cad1-ce62-4dbf-b1f8-5538e8531c1e
+                DependencyProperties: {}
+                BackgroundColor: {R: 0, G: 0, B: 0, A: 0}
+                DrawLayerNumber: 2
+                Width: 180.0
+                Height: 180.0
+                HorizontalAlignment: Left
+                VerticalAlignment: Top
+                Margin: {Left: 100.0, Top: 90.0}
+                MaximumWidth: 3.4028235E+38
+                MaximumHeight: 3.4028235E+38
+                MaximumDepth: 3.4028235E+38
+                Name: Threshold
+                Padding: {}
+                Content: !ImageElement ref!! f0eeadac-b356-417b-aa54-f305defd95f2
+                BackgroundImage: !SpriteFromSheet
+                    Sheet: bc6ca5cd-e3d2-48e7-be45-7c9a5c917278:Threshold
         -   UIElement: !Canvas
                 Id: 4635e96d-81c4-4e1f-8954-ea20140446bd
                 DependencyProperties: {}
@@ -19,22 +37,6 @@ Hierarchy:
                 Name: Surface
                 Children:
                     45048d70d9a5ad0706ba9ee7b4ddf2a7: !Canvas ref!! e6593e1c-28ef-4dd3-a23c-e21d3d45f56d
-        -   UIElement: !ImageElement
-                Id: 6129ccc5-f5c5-4827-89b5-f1b7b6f51f97
-                DependencyProperties: {}
-                BackgroundColor: {R: 0, G: 0, B: 0, A: 0}
-                Width: 180.0
-                Height: 180.0
-                HorizontalAlignment: Left
-                VerticalAlignment: Top
-                Margin: {Left: 100.0, Top: 90.0}
-                MaximumWidth: 3.4028235E+38
-                MaximumHeight: 3.4028235E+38
-                MaximumDepth: 3.4028235E+38
-                Name: Threshold
-                Source: !SpriteFromSheet
-                    Sheet: bc6ca5cd-e3d2-48e7-be45-7c9a5c917278:Threshold
-                Color: {R: 255, G: 255, B: 255, A: 255}
         -   UIElement: !Canvas
                 Id: e6593e1c-28ef-4dd3-a23c-e21d3d45f56d
                 DependencyProperties: {}
@@ -49,8 +51,7 @@ Hierarchy:
                 MaximumDepth: 3.4028235E+38
                 Name: Zone
                 Children:
-                    027aa7a85c91db4a94b1b281b3f70fd2: !ImageElement ref!! 6129ccc5-f5c5-4827-89b5-f1b7b6f51f97
-                    068385093ed4f31edccc6477c9325c3f: !ImageElement ref!! f0eeadac-b356-417b-aa54-f305defd95f2
+                    cdf054f021867dbbfcca422bbee5a217: !ContentDecorator ref!! 3276cad1-ce62-4dbf-b1f8-5538e8531c1e
         -   UIElement: !ImageElement
                 Id: f0eeadac-b356-417b-aa54-f305defd95f2
                 DependencyProperties: {}
@@ -59,7 +60,7 @@ Hierarchy:
                 Height: 90.0
                 HorizontalAlignment: Left
                 VerticalAlignment: Top
-                Margin: {Left: 145.0, Top: 135.0}
+                Margin: {Left: 45.0, Top: 45.0}
                 MaximumWidth: 3.4028235E+38
                 MaximumHeight: 3.4028235E+38
                 MaximumDepth: 3.4028235E+38

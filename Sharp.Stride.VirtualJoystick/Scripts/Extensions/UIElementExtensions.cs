@@ -62,19 +62,19 @@ namespace Sharp.Stride.VirtualJoystick.Scripts.Extensions
             }
         }
 
-        public static void ScaleSize(this UIElement element, Vector2 resolutionScale, bool isSquare)
+        public static void ScaleSize(this UIElement element, Vector2 originalSize, Vector2 resolutionScale, bool isSquare)
         {
             if (isSquare)
-                element.ScaleSquare(resolutionScale);
+                element.ScaleSquareSize(originalSize, resolutionScale);
             else
-                element.ScaleSize(resolutionScale);
+                element.ScaleSize(originalSize, resolutionScale);
         }
 
-        public static void ScaleSquare(this UIElement element, Vector2 resolutionScale)
+        public static void ScaleSquareSize(this UIElement element, Vector2 originalSize, Vector2 resolutionScale)
         {
-            float size = float.IsNaN(element.Width)
-                    ? element.Height
-                    : element.Width;
+            float size = float.IsNaN(originalSize.X)
+                    ? originalSize.Y
+                    : originalSize.X;
             bool hasSize = !float.IsNaN(size);
 
             if (hasSize)
@@ -86,21 +86,40 @@ namespace Sharp.Stride.VirtualJoystick.Scripts.Extensions
             }
         }
 
-        public static void ScaleSize(this UIElement element, Vector2 resolutionScale)
+        public static void ScaleSize(this UIElement element, Vector2 originalSize, Vector2 resolutionScale)
         {
             if (!float.IsNaN(element.Width))
-                element.Width *= resolutionScale.X;
+                element.Width = originalSize.X * resolutionScale.X;
             if (!float.IsNaN(element.Height))
-                element.Height *= resolutionScale.Y;
+                element.Height = originalSize.Y * resolutionScale.Y;
         }
 
-        public static void ScaleMargin(this UIElement element, Vector2 resolutionScale)
+        public static void ScaleMargin(this UIElement element, Thickness originalMargin, Vector2 resolutionScale, bool isSquare)
+        {
+            if (isSquare)
+                element.ScaleSquareMargin(originalMargin, resolutionScale);
+            else
+                element.ScaleMargin(originalMargin, resolutionScale);
+        }
+
+        public static void ScaleSquareMargin(this UIElement element, Thickness originalMargin, Vector2 resolutionScale)
+        {
+            float scale = Math.Min(resolutionScale.X, resolutionScale.Y);
+
+            element.Margin = new Thickness(
+                originalMargin.Left * scale,
+                originalMargin.Top * scale,
+                originalMargin.Right * scale,
+                originalMargin.Bottom * scale);
+        }
+
+        public static void ScaleMargin(this UIElement element, Thickness originalMargin, Vector2 resolutionScale)
         {
             element.Margin = new Thickness(
-                element.Margin.Left * resolutionScale.X,
-                element.Margin.Top * resolutionScale.Y,
-                element.Margin.Right * resolutionScale.X,
-                element.Margin.Bottom * resolutionScale.Y);
+                originalMargin.Left * resolutionScale.X,
+                originalMargin.Top * resolutionScale.Y,
+                originalMargin.Right * resolutionScale.X,
+                originalMargin.Bottom * resolutionScale.Y);
         }
     }
 }

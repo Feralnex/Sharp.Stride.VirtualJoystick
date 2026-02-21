@@ -1,4 +1,5 @@
 ﻿using System;
+using Sharp.Stride.VirtualJoystick.Scripts.UI.Controls;
 using Stride.Core;
 using Stride.Core.Mathematics;
 using Stride.Engine;

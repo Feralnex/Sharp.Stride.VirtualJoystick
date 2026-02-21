@@ -73,8 +73,8 @@ Hierarchy:
                         Page: 014c9a89-07ae-4d1b-975a-95feb65ff4df:VirtualJoystick
                         Resolution: {X: 1920.0, Y: 1080.0, Z: 1000.0}
                         Size: {X: 1.28, Y: 0.72, Z: 1.0}
-                    3ccf9757c5ef517777acb09a2fd65ddf: !Sharp.Stride.VirtualJoystick.Scripts.VirtualJoystick,Sharp.Stride.VirtualJoystick
-                        Id: dafee688-f302-48b7-bf4d-78fd68e9080c
+                    1c1b4ffbc57b32c8ace784a52322940d: !Sharp.Stride.VirtualJoystick.Scripts.UI.Controls.VirtualJoystick,Sharp.Stride.VirtualJoystick
+                        Id: 814f6649-e1b2-49a0-82bb-a8e943fcf410
                         DesignResolution: {Width: 1280, Height: 720}
                         RelativeObject: ref!! 593b37a4-b572-4e34-975e-7bccc86898f4
                         InactiveOpacity: 0.5
@@ -128,4 +128,4 @@ Hierarchy:
                         KeyboardRotationSpeed: {X: 3.0, Y: 3.0}
                         MouseRotationSpeed: {X: 1.0, Y: 1.0}
                         TouchRotationSpeed: {X: 1.0, Y: 0.7}
-                        VirtualJoystick: !Sharp.Stride.VirtualJoystick.Scripts.VirtualJoystick,Sharp.Stride.VirtualJoystick ref!! dafee688-f302-48b7-bf4d-78fd68e9080c
+                        VirtualJoystick: !Sharp.Stride.VirtualJoystick.Scripts.UI.Controls.VirtualJoystick,Sharp.Stride.VirtualJoystick ref!! 814f6649-e1b2-49a0-82bb-a8e943fcf410
