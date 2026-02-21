@@ -2,12 +2,10 @@
 using Sharp.Collections;
 using Sharp.Collections.Extensions;
 using Sharp.Stride.VirtualJoystick.Scripts.Structures;
-using Stride.Core;
+using Sharp.Stride.VirtualJoystick.Scripts.UI.Scaling;
 using Stride.Core.Annotations;
 using Stride.Core.Mathematics;
 using Stride.Engine;
-using Stride.Games;
-using Stride.Graphics;
 using Stride.Input;
 using Stride.UI;
 using Stride.UI.Controls;
@@ -16,7 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
-namespace Sharp.Stride.VirtualJoystick.Scripts
+namespace Sharp.Stride.VirtualJoystick.Scripts.UI.Controls
 {
     public class VirtualJoystick : SyncScript, IVirtualJoystick
     {
@@ -58,16 +56,16 @@ namespace Sharp.Stride.VirtualJoystick.Scripts
             remove => _relativeAngleChangedListeners.Remove(value);
         }
 
-        private readonly References<Action<Vector2>> _startedDraggingListeners = new References<Action<Vector2>>();
-        private readonly References<Action<Vector2>> _stoppedDraggingListeners = new References<Action<Vector2>>();
-        private readonly References<Action<Vector2>> _absoluteInputChangedListeners = new References<Action<Vector2>>();
-        private readonly References<Action<Vector2>> _relativeInputChangedListeners = new References<Action<Vector2>>();
-        private readonly References<Action<float>> _radiusChangedListeners = new References<Action<float>>();
-        private readonly References<Action<Angle>> _absoluteAngleChangedListeners = new References<Action<Angle>>();
-        private readonly References<Action<Angle>> _relativeAngleChangedListeners = new References<Action<Angle>>();
-        private readonly Reference<Action<Vector2>> _dragging = new Reference<Action<Vector2>>();
+        private readonly References<Action<Vector2>> _startedDraggingListeners = new();
+        private readonly References<Action<Vector2>> _stoppedDraggingListeners = new();
+        private readonly References<Action<Vector2>> _absoluteInputChangedListeners = new();
+        private readonly References<Action<Vector2>> _relativeInputChangedListeners = new();
+        private readonly References<Action<float>> _radiusChangedListeners = new();
+        private readonly References<Action<Angle>> _absoluteAngleChangedListeners = new();
+        private readonly References<Action<Angle>> _relativeAngleChangedListeners = new();
+        private readonly Reference<Action<Vector2>> _dragging = new();
 
-        #endregion Events
+        #endregion
 
         #region Input
 
@@ -137,21 +135,19 @@ namespace Sharp.Stride.VirtualJoystick.Scripts
         public float RelativeAngleInRadians => _relativeAngleInRadians;
         public float RelativeAngleInDegrees => _relativeAngleInDegrees;
 
-        #endregion Input
+        #endregion
 
         #region UI
 
+        private Thickness _initialThresholdMargin;
+        private Thickness _initialThumbstickMargin;
+        private Vector2 _currentThresholdPosition;
+        private Vector2 _currentThumbstickPosition;
+
         private IAutoUIScaling AutoScaling { get; set; }
-        private Vector3 ZonePosition => AutoScaling.GetPosition(Zone);
-        private Vector3 InitialThresholdPosition => AutoScaling.GetPosition(Threshold);
-        private Vector3 InitialThumbstickPosition => AutoScaling.GetPosition(Thumbstick);
-
-        private Vector3 _currentThresholdPosition;
-        private Vector3 _currentThumbstickPosition;
-
         private UIComponent UI { get; set; }
         private Canvas Zone { get; set; }
-        private ImageElement Threshold { get; set; }
+        private ContentDecorator Threshold { get; set; }
         private ImageElement Thumbstick { get; set; }
 
         private Size2 _designResolution = new Size2(1280, 720);
@@ -182,7 +178,7 @@ namespace Sharp.Stride.VirtualJoystick.Scripts
             set => _activeOpacity = value;
         }
 
-        #endregion UI
+        #endregion
 
         public override void Start()
         {
@@ -192,7 +188,6 @@ namespace Sharp.Stride.VirtualJoystick.Scripts
 
             AutoScaling = Services.GetService<IAutoUIScaling>();
             AutoScaling.Add(UI, _designResolution);
-            AutoScaling.SetCustomScaling(Thumbstick, OnScaleThumbstickPosition);
         }
 
         public override void Update()
@@ -217,7 +212,7 @@ namespace Sharp.Stride.VirtualJoystick.Scripts
 
             UI = ui;
             Zone = root.FindVisualChildOfType<Canvas>(nameof(Zone));
-            Threshold = root.FindVisualChildOfType<ImageElement>(nameof(Threshold));
+            Threshold = root.FindVisualChildOfType<ContentDecorator>(nameof(Threshold));
             Thumbstick = root.FindVisualChildOfType<ImageElement>(nameof(Thumbstick));
         }
 
@@ -232,19 +227,6 @@ namespace Sharp.Stride.VirtualJoystick.Scripts
             _absoluteAngleInDegrees = 0f;
             _relativeAngleInRadians = 0f;
             _relativeAngleInDegrees = 0f;
-        }
-
-        private Vector3 OnScaleThumbstickPosition(UIElement element)
-        {
-            var thresholdPosition = AutoScaling.GetPosition(Threshold);
-            var thumbstickPosition = new Vector3()
-            {
-                X = thresholdPosition.X + Threshold.Width / 2 - Thumbstick.Width / 2,
-                Y = thresholdPosition.Y + Threshold.Height / 2 - Thumbstick.Height / 2,
-                Z = thresholdPosition.Z
-            };
-
-            return thumbstickPosition;
         }
 
         private void OnSomePointingInsideZone(int pointerId)
@@ -275,13 +257,13 @@ namespace Sharp.Stride.VirtualJoystick.Scripts
 
         private bool IsPointingInsideZone(Vector2 pointerPosition)
         {
-            Vector2 zonePosition = new Vector2(ZonePosition.X, ZonePosition.Y);
+            Vector2 zonePosition = new Vector2(Zone.Margin.Left, Zone.Margin.Top);
             Size2 zoneSize = new Size2((int)Zone.Width, (int)Zone.Height);
 
-            return pointerPosition.X >= zonePosition.X &&
-                pointerPosition.X <= zonePosition.X + zoneSize.Width &&
-                pointerPosition.Y >= zonePosition.Y &&
-                pointerPosition.Y <= zonePosition.Y + zoneSize.Height;
+            return pointerPosition.X >= zonePosition.X
+                && pointerPosition.X <= zonePosition.X + zoneSize.Width 
+                && pointerPosition.Y >= zonePosition.Y
+                && pointerPosition.Y <= zonePosition.Y + zoneSize.Height;
         }
 
         private void HandlePointerEvents(int startIndex, int pointerId)
@@ -315,17 +297,21 @@ namespace Sharp.Stride.VirtualJoystick.Scripts
 
         private void OnPointerDown(Vector2 position)
         {
-            _currentThresholdPosition.X = position.X - ZonePosition.X - Threshold.Width / 2;
-            _currentThresholdPosition.Y = position.Y - ZonePosition.Y - Threshold.Height / 2;
-            _currentThumbstickPosition.X = _currentThresholdPosition.X + Threshold.Width / 2 - Thumbstick.Width / 2;
-            _currentThumbstickPosition.Y = _currentThresholdPosition.Y + Threshold.Height / 2 - Thumbstick.Height / 2;
+            _initialThresholdMargin = Threshold.Margin;
+            _initialThumbstickMargin = Thumbstick.Margin;
+            _currentThresholdPosition.X = position.X - Zone.Margin.Left - Threshold.Width / 2;
+            _currentThresholdPosition.Y = position.Y - Zone.Margin.Top - Threshold.Height / 2;
 
             _startedDraggingListeners?.IfSome(OnSomeStartedDragging, position);
             Activate();
             _dragging.Set(OnDragging);
 
-            Threshold.SetCanvasAbsolutePosition(_currentThresholdPosition);
-            Thumbstick.SetCanvasAbsolutePosition(_currentThumbstickPosition);
+            Threshold.Margin = new Thickness(
+                _currentThresholdPosition.X,
+                _currentThresholdPosition.Y,
+                Threshold.Margin.Right,
+                Threshold.Margin.Bottom
+            );
 
             _absoluteInputChangedListeners?.IfSome(OnSomeInputChanged, _absoluteInput);
             _relativeInputChangedListeners?.IfSome(OnSomeRelativeInputChanged, _relativeInput);
@@ -345,8 +331,8 @@ namespace Sharp.Stride.VirtualJoystick.Scripts
             _relativeInput = Vector2.Zero;
             _radius = 0f;
 
-            Threshold.SetCanvasAbsolutePosition(InitialThresholdPosition);
-            Thumbstick.SetCanvasAbsolutePosition(InitialThumbstickPosition);
+            Threshold.Margin = _initialThresholdMargin;
+            Thumbstick.Margin = _initialThumbstickMargin;
 
             _absoluteInputChangedListeners?.IfSome(OnSomeInputChanged, _absoluteInput);
             _relativeInputChangedListeners?.IfSome(OnSomeRelativeInputChanged, _relativeInput);
@@ -357,8 +343,9 @@ namespace Sharp.Stride.VirtualJoystick.Scripts
         private void OnDragging(Vector2 position)
         {
             Vector2 localPoint = new Vector2(
-                x: position.X - ZonePosition.X - _currentThresholdPosition.X - Threshold.Width / 2,
-                y: position.Y - ZonePosition.Y - _currentThresholdPosition.Y - Threshold.Height / 2);
+                position.X - Zone.Margin.Left - _currentThresholdPosition.X - Threshold.Width / 2,
+                position.Y - Zone.Margin.Top - _currentThresholdPosition.Y - Threshold.Height / 2
+            );
             Vector2 clampedLocalPoint = ClampLocalPoint(localPoint, Threshold.Size);
             Vector2 input = CalculateInput(clampedLocalPoint);
             Vector2 thumbstickPosition = CalculateThumbstickPosition(input, Threshold.Size);
@@ -373,10 +360,15 @@ namespace Sharp.Stride.VirtualJoystick.Scripts
             _relativeAngleInRadians = CalculateRotationAngle(_absoluteAngleInRadians, AngleOffsetInRadians);
             _relativeAngleInDegrees = MathUtil.RadiansToDegrees(_relativeAngleInRadians);
 
-            _currentThumbstickPosition.X = _currentThresholdPosition.X + thumbstickPosition.X + Thumbstick.Width / 2;
-            _currentThumbstickPosition.Y = _currentThresholdPosition.Y + thumbstickPosition.Y + Thumbstick.Height / 2;
+            _currentThumbstickPosition.X = thumbstickPosition.X + Thumbstick.Width / 2;
+            _currentThumbstickPosition.Y = thumbstickPosition.Y + Thumbstick.Height / 2;
 
-            Thumbstick.SetCanvasAbsolutePosition(_currentThumbstickPosition);
+            Thumbstick.Margin = new Thickness(
+                _currentThumbstickPosition.X,
+                _currentThumbstickPosition.Y,
+                Thumbstick.Margin.Right,
+                Thumbstick.Margin.Bottom
+            );
 
             _absoluteInputChangedListeners?.IfSome(OnSomeInputChanged, _absoluteInput);
             _relativeInputChangedListeners?.IfSome(OnSomeRelativeInputChanged, _relativeInput);
@@ -462,7 +454,10 @@ namespace Sharp.Stride.VirtualJoystick.Scripts
         private static float CalculateRotationAngle(float angleInRadians, float radiansOffset)
         {
             float threshold = MathUtil.TwoPi - radiansOffset;
-            return angleInRadians < threshold ? radiansOffset + angleInRadians : angleInRadians - threshold;
+
+            return angleInRadians < threshold
+                ? radiansOffset + angleInRadians
+                : angleInRadians - threshold;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Sharp.Stride.VirtualJoystick.Scripts.UIScaling;
+﻿using Sharp.Stride.VirtualJoystick.Scripts.UI.Scaling;
 using Stride.Engine;
 
 namespace Sharp.Stride.VirtualJoystick.Scripts

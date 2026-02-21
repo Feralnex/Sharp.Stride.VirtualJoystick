@@ -2,7 +2,7 @@
 using System;
 using Sharp.Stride.VirtualJoystick.Scripts.Structures;
 
-namespace Sharp.Stride.VirtualJoystick.Scripts
+namespace Sharp.Stride.VirtualJoystick.Scripts.UI.Controls
 {
     public interface IVirtualJoystick
     {
