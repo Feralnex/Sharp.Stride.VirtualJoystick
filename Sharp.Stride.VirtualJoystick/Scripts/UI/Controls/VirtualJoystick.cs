@@ -378,16 +378,10 @@ namespace Sharp.Stride.VirtualJoystick.Scripts.UI.Controls
         }
 
         private void Activate()
-        {
-            Threshold.Opacity = _activeOpacity;
-            Thumbstick.Opacity = _activeOpacity;
-        }
+            => Threshold.Opacity = _activeOpacity;
 
         private void Deactivate()
-        {
-            Threshold.Opacity = _inactiveOpacity;
-            Thumbstick.Opacity = _inactiveOpacity;
-        }
+            => Threshold.Opacity = _inactiveOpacity;
 
         private void OnSomeStartedDragging(Action<Vector2> startedDragging, Vector2 input)
             => startedDragging(input);

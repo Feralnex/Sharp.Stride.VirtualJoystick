@@ -1,5 +1,6 @@
 ﻿using Stride.Core.Mathematics;
 using Stride.UI;
+using Stride.UI.Controls;
 using System;
 
 namespace Sharp.Stride.VirtualJoystick.Scripts.Extensions
@@ -97,20 +98,14 @@ namespace Sharp.Stride.VirtualJoystick.Scripts.Extensions
         public static void ScaleMargin(this UIElement element, Thickness originalMargin, Vector2 resolutionScale, bool isSquare)
         {
             if (isSquare)
-                element.ScaleSquareMargin(originalMargin, resolutionScale);
-            else
-                element.ScaleMargin(originalMargin, resolutionScale);
-        }
+            {
+                float scale = Math.Min(resolutionScale.X, resolutionScale.Y);
 
-        public static void ScaleSquareMargin(this UIElement element, Thickness originalMargin, Vector2 resolutionScale)
-        {
-            float scale = Math.Min(resolutionScale.X, resolutionScale.Y);
+                resolutionScale.X = scale;
+                resolutionScale.Y = scale;
+            }
 
-            element.Margin = new Thickness(
-                originalMargin.Left * scale,
-                originalMargin.Top * scale,
-                originalMargin.Right * scale,
-                originalMargin.Bottom * scale);
+            element.ScaleMargin(originalMargin, resolutionScale);
         }
 
         public static void ScaleMargin(this UIElement element, Thickness originalMargin, Vector2 resolutionScale)
@@ -120,6 +115,28 @@ namespace Sharp.Stride.VirtualJoystick.Scripts.Extensions
                 originalMargin.Top * resolutionScale.Y,
                 originalMargin.Right * resolutionScale.X,
                 originalMargin.Bottom * resolutionScale.Y);
+        }
+
+        public static void ScalePadding(this Control control, Thickness originalPadding, Vector2 resolutionScale, bool isSquare)
+        {
+            if (isSquare)
+            {
+                float scale = Math.Min(resolutionScale.X, resolutionScale.Y);
+
+                resolutionScale.X = scale;
+                resolutionScale.Y = scale;
+            }
+
+            control.ScaleMargin(originalPadding, resolutionScale);
+        }
+
+        public static void ScalePadding(this Control control, Thickness originalPadding, Vector2 resolutionScale)
+        {
+            control.Padding = new Thickness(
+                originalPadding.Left * resolutionScale.X,
+                originalPadding.Top * resolutionScale.Y,
+                originalPadding.Right * resolutionScale.X,
+                originalPadding.Bottom * resolutionScale.Y);
         }
     }
 }
