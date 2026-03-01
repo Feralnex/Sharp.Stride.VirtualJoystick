@@ -1,4 +1,6 @@
-﻿using Stride.Core.Mathematics;
+﻿using CommunityToolkit.HighPerformance;
+using Sharp.Collections.Extensions;
+using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.UI;
 using Stride.UI.Controls;
@@ -10,13 +12,13 @@ namespace Sharp.Stride.VirtualJoystick.Scripts.UI.Scaling
     public partial class AutoUIScaling : IAutoUIScaling
     {
         private readonly Game _game;
-        private readonly List<ScalableUIComponent> _scalableComponents;
+        private readonly Dictionary<UIComponent, ScalableUIComponent> _scalableComponents;
         private Size2 _currentResolution;
 
         public AutoUIScaling(Game game)
         {
             _game = game;
-            _scalableComponents = new List<ScalableUIComponent>();
+            _scalableComponents = new Dictionary<UIComponent, ScalableUIComponent>();
             _currentResolution = game.Window.ClientBounds.Size;
 
             _game.Window.ClientSizeChanged += OnClientSizeChanged;
@@ -29,13 +31,16 @@ namespace Sharp.Stride.VirtualJoystick.Scripts.UI.Scaling
 
         public void Add(UIComponent component, Size2 designResolution)
         {
-            ScalableUIComponent scalableComponent = new ScalableUIComponent(component, designResolution);
+            if (!_scalableComponents.TryGetValue(component, out ScalableUIComponent scalableComponent))
+            {
+                scalableComponent = new ScalableUIComponent(component, designResolution);
 
-            _scalableComponents.Add(scalableComponent);
+                _scalableComponents.Add(component, scalableComponent);
 
-            CacheScalableElements(component.Page.RootElement, scalableComponent);
+                CacheScalableElements(component.Page.RootElement, scalableComponent);
 
-            scalableComponent.Scale(_currentResolution);
+                scalableComponent.Scale(_currentResolution);
+            }
         }
 
         private static void CacheScalableElements(UIElement element, ScalableUIComponent data)
@@ -59,8 +64,20 @@ namespace Sharp.Stride.VirtualJoystick.Scripts.UI.Scaling
         {
             _currentResolution = _game.Window.ClientBounds.Size;
 
-            foreach (ScalableUIComponent scalableComponent in _scalableComponents)
-                scalableComponent.Scale(_currentResolution);
+            int count = _scalableComponents.Count;
+            DictionaryExtensions.Entry<UIComponent, ScalableUIComponent>[] entries = _scalableComponents.GetEntries();
+
+            for (int index = 0; index < count; index++)
+            {
+                ref DictionaryExtensions.Entry<UIComponent, ScalableUIComponent> entry = ref entries!.DangerousGetReferenceAt(index);
+
+                if (entry.next >= -1)
+                {
+                    ScalableUIComponent scalableComponent = entry.value;
+
+                    scalableComponent.Scale(_currentResolution);
+                }
+            }
         }
     }
 }

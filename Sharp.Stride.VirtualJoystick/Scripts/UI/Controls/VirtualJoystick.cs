@@ -56,14 +56,14 @@ namespace Sharp.Stride.VirtualJoystick.Scripts.UI.Controls
             remove => _relativeAngleChangedListeners.Remove(value);
         }
 
-        private readonly References<Action<Vector2>> _startedDraggingListeners = new();
-        private readonly References<Action<Vector2>> _stoppedDraggingListeners = new();
-        private readonly References<Action<Vector2>> _absoluteInputChangedListeners = new();
-        private readonly References<Action<Vector2>> _relativeInputChangedListeners = new();
-        private readonly References<Action<float>> _radiusChangedListeners = new();
-        private readonly References<Action<Angle>> _absoluteAngleChangedListeners = new();
-        private readonly References<Action<Angle>> _relativeAngleChangedListeners = new();
-        private readonly Reference<Action<Vector2>> _dragging = new();
+        private readonly References<Action<Vector2>> _startedDraggingListeners = new References<Action<Vector2>>();
+        private readonly References<Action<Vector2>> _stoppedDraggingListeners = new References<Action<Vector2>>();
+        private readonly References<Action<Vector2>> _absoluteInputChangedListeners = new References<Action<Vector2>>();
+        private readonly References<Action<Vector2>> _relativeInputChangedListeners = new References<Action<Vector2>>();
+        private readonly References<Action<float>> _radiusChangedListeners = new References<Action<float>>();
+        private readonly References<Action<Angle>> _absoluteAngleChangedListeners = new References<Action<Angle>>();
+        private readonly References<Action<Angle>> _relativeAngleChangedListeners = new References<Action<Angle>>();
+        private readonly Reference<Action<Vector2>> _dragging = new Reference<Action<Vector2>>();
 
         #endregion
 
